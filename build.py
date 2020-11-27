@@ -2,8 +2,10 @@
 
 import os
 import sys
+from yapf.yapflib.yapf_api import FormatFile
 
 MAGIC_COMMENT = "# BUILD_IGNORE\n"
+
 
 def build(scanner_path):
     scanner_name = scanner_path.replace("_", " ").title()
@@ -14,7 +16,12 @@ def build(scanner_path):
         append_file(output, 'base_scanner.py')
         append_file(output, scanner_path + ".py")
 
-    print(f"build distribution at {output_path}")
+    format_file(output_path)
+    print(f"built distribution at {output_path}")
+
+
+def format_file(path):
+    FormatFile(path, in_place=True, style_config=".style.yapf")
 
 
 def append_file(output, file_path):
@@ -26,5 +33,3 @@ def append_file(output, file_path):
 
 if __name__ == '__main__':
     build(sys.argv[1])
-
-
